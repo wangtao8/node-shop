@@ -30,9 +30,11 @@
 				</el-menu>
 			</el-col>
 			<el-col :span="20" style="height: 100%;overflow: auto;">
-				<keep-alive>
-					<router-view></router-view>
-				</keep-alive>
+				<!--<keep-alive>-->
+					<transition :name="transitionName" :key="toDepth">   
+						<router-view></router-view>
+    				</transition>
+				<!--</keep-alive>-->
 			</el-col>
 		</el-row>
 	</div>
@@ -41,7 +43,10 @@
 <script>
 	export default {
 		data() {
-			return {}
+			return {
+ 			   transitionName:'bounce',
+ 			   toDepth: ''
+			}
 		},
 		methods: {
 			handleOpen(key, keyPath) {
@@ -51,9 +56,17 @@
 				console.log(key, keyPath);
 			}
 		},
+		watch: {
+		    '$route' (to, from) {
+		      const toDepth = to.path.split('/')[1]
+		      const fromDepth = from.path.split('/')[1]
+		      this.toDepth = toDepth
+//		      console.log('toDepth:', toDepth, 'fromDepth:', fromDepth)
+		    }
+		 },
 		computed: {
 			defaultActive: function(key, keyPath) {
-				console.log('xxxxxxx:', this.$route.query)
+//				console.log('xxxxxxx:', this.$route.query)
 				//				return this.$route.path;
 				return this.$route.path.replace('/', '');
 			}
@@ -62,8 +75,25 @@
 </script>
 
 <style>
-	.el-menu{
-		background-color: rgb(50, 64, 87)!important;
-		width: 100%;
-	}
+.el-menu{
+	background-color: rgb(50, 64, 87)!important;
+	width: 100%;
+}
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 </style>

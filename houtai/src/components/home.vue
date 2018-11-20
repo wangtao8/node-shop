@@ -125,7 +125,7 @@
 					pageIndex: this.pageIndex
 				}
 				const res = await getUsers(data);
-				console.log('页面加载拿到的数据：', res)
+//				console.log('页面加载拿到的数据：', res)
 				this.tableData = res.conut
 				this.pageAll = res.total
 			},
@@ -142,7 +142,6 @@
 		},
 		mounted() {
 			this.getUserInfo()
-			console.log('页面加载时的name：', this.$route.query.name)
 		}
 	}
 </script>
