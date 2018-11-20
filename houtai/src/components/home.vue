@@ -1,6 +1,6 @@
 <template>
 	<el-container>
-		<div>欢迎您：{{$store.state.name}}!</div>
+		<div class="users">欢迎您：<span>{{$store.state.name}}!</span></div>
 		<el-header>
 			<el-table :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
 				<el-table-column label="Id" prop="id">
@@ -146,7 +146,25 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
+	/**
+	 * 在 Sass 中，@include 代表这调用定义好的 @mixin
+	 * */
+	@mixin fontStyle($size, $color) {
+		font-size: $size;
+		color: $color;
+	}
+	/*如果文中出现中文防止报错*/
+	@charset "utf-8";
+	/*定义变量用$*/
+	$orange: #f60; 
+	$blacks: black;
+	.users{
+		@include fontStyle(26px, $orange);
+		span{
+			color: $blacks;
+		}
+	}
 	.motai {
 		width: 100%;
 		height: 100%;

@@ -13,6 +13,15 @@ Vue.use(ElementUI)
 Vue.prototype.$http = http;
 Vue.config.productionTip = false
 
+// 点击导航前调用
+router.beforeEach((to, from, next) => {
+  // ...
+  console.log('目标路由对象to:', to.fullPath, '当前导航正要离开的路由from:', from.fullPath)
+  //放行
+	next()
+	//中断当前的导航
+//next(false)
+})
 
 
 /* eslint-disable no-new */
