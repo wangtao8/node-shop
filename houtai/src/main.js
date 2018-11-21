@@ -9,6 +9,10 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+Vue.directive('test_directive', function(el, bind, vNode){
+	el.style.color = bind.value()
+})
+
 Vue.use(ElementUI)
 Vue.prototype.$http = http;
 Vue.config.productionTip = false

@@ -1,6 +1,6 @@
 <template>
 	<el-container>
-		<div class="users">欢迎您：<span>{{$store.state.name}}!</span></div>
+		<div class="users" v-test_directive="changeColor">欢迎您：<span>{{$store.state.name}}!</span></div>
 		<el-header>
 			<el-table :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))" style="width: 100%">
 				<el-table-column label="Id" prop="id">
@@ -58,6 +58,7 @@
 	export default {
 		data() {
 			return {
+				color: 'red',
 				tableData: [], //总共的数据
 				search: '',
 				nowData: {}, //当前编辑的数据
@@ -79,6 +80,9 @@
 			}
 		},
 		methods: {
+			changeColor(){
+				return this.color
+			},
 			handleOpen(key, keyPath) {
 				console.log(key, keyPath);
 			},
