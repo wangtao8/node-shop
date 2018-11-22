@@ -6,7 +6,7 @@ var multer  = require('multer');
 
 //初始化上传目录,自定义本地保存的路径
 //var upload = multer({ dest: './files/' }); //使用storage时不需要单独制定目录，storage中有目录设置
-var uploadFolder='./assets/'; //放入静态资源目录才能正常显示 页面路径一定要正确 我擦  坑啊！！！！
+var uploadFolder='./public/images'; //放入静态资源目录才能正常显示 页面路径一定要正确 我擦  坑啊！！！！
 
 // 通过storage的 filename 属性定制上传文件名称
 var storage = multer.diskStorage({
