@@ -29,3 +29,9 @@ export const editUser = data => fetch('/api/editUser', data, 'POST');
  * */
 
 export const getUsers = data => fetch('/api/getUsers', data, 'POST');
+
+/**
+ * 获得商品列表
+ * */
+
+export const getGoodsList = data => fetch('/api/getGoodsList', data, 'POST');

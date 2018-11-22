@@ -6,7 +6,8 @@ Vue.use(Router)
 const Login = r => require.ensure([], () => r(require('@/components/Login')), 'Login');
 const Index = r => require.ensure([], () => r(require('@/components/Index')), 'Index');
 const Home = r => require.ensure([], () => r(require('@/components/Home')), 'Home');
-const Vue2 = r => require.ensure([], () => r(require('@/components/Vue2')), 'Vue2');
+const goodsList = r => require.ensure([], () => r(require('@/components/goodsList')), 'goodsList');
+const goodsInfo = r => require.ensure([], () => r(require('@/components/goodsInfo')), 'goodsInfo');
 const Vue3 = r => require.ensure([], () => r(require('@/components/Vue3')), 'Vue3');
 const Vue4 = r => require.ensure([], () => r(require('@/components/Vue4')), 'Vue4');
 //import Login from '@/components/login'
@@ -26,8 +27,11 @@ const routes = [{
 					path: '/',
 					component: Home
 				}, {
-					path: '/vue2',
-					component: Vue2
+					path: '/goodsList',
+					component: goodsList
+				}, {
+					path: '/goodsInfo',
+					component: goodsInfo
 				}, {
 					path: '/vue3',
 					component: Vue3

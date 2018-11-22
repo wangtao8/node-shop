@@ -1,8 +1,46 @@
 var express = require('express');
 var router = express.Router();
 var connection = require('../mysql/goods').connection; //引入链接
+//引入上传中间件模块
+var multer  = require('multer');
+
+//初始化上传目录,自定义本地保存的路径
+//var upload = multer({ dest: './files/' }); //使用storage时不需要单独制定目录，storage中有目录设置
+var uploadFolder='./assets/'; //放入静态资源目录才能正常显示 页面路径一定要正确 我擦  坑啊！！！！
+
+// 通过storage的 filename 属性定制上传文件名称
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadFolder);    // 保存的路径，备注：需要自己创建如果不存在会报错
+  },
+  filename: function (req, file, cb) {
+    //将保存文件名设置为 前缀+时间戳+文件扩展名
+    var extName=file.originalname.substring(file.originalname.lastIndexOf(".")); //.jpg
+    cb(null, file.fieldname + '_' + new Date().getTime() + extName);
+  }
+});
+
+// 通过 storage 选项来对 上传行为 进行定制化
+var upload = multer({ storage: storage });
+
+/* 文件上传的api */
+router.post('/upload',upload.single("uploadFile"), function(req, res, next) {
+  var fileInfo = req.file; //multer会将文件的信息写到 req.file上
+  console.log('文件类型：', fileInfo.mimetype);
+  console.log('原始文件名：', fileInfo.originalname);
+  console.log('文件大小：', fileInfo.size);
+  console.log('文件保存路径：', fileInfo.path);
+  //返回图片的相对路径
+  //res.send(fileInfo.path);
+  /**设置响应头允许ajax跨域访问**/
+  res.setHeader("Access-Control-Allow-Origin","*");
+	/*星号表示所有的异域请求都可以接受，*/
+  res.setHeader("Access-Control-Allow-Methods","GET,POST");
+  res.send(fileInfo.path.toString().replace("public",""));
+});
+
 /* GET home page. */
-router.get('/', function(req, response, next) {
+router.get('/test', function(req, response, next) {
 	Promise.all([test(), test1(), test2(), test3(),test4(),test5()])//这种方法还可以
 		.then(function(result){
 			var keys = {data:{},errmsg:"",errno:0}
@@ -18,10 +56,6 @@ router.get('/', function(req, response, next) {
 
 router.post('/regiester',function(req,response,next){
 	console.log('req.body:', req.body)
-	/**设置响应头允许ajax跨域访问**/
-//	response.setHeader("Access-Control-Allow-Origin","*");
-	/*星号表示所有的异域请求都可以接受，*/
-//	response.setHeader("Access-Control-Allow-Methods","GET,POST");
 	var sql = "INSERT INTO my_user (name, password) VALUES ('" + req.body.name + "', '" + req.body.pass + "')"//值用单引号包括
 		connection.query(sql, function(error, results, fields) {
 			try{
@@ -38,10 +72,6 @@ router.post('/regiester',function(req,response,next){
 //login
 router.post('/login',function(req,response,next){
 	console.log('req.body:', req.body)
-	/**设置响应头允许ajax跨域访问**/
-//	response.setHeader("Access-Control-Allow-Origin","*");
-	/*星号表示所有的异域请求都可以接受，*/
-//	response.setHeader("Access-Control-Allow-Methods","GET,POST");
 	var sql = "SELECT count(1) as nums FROM my_user WHERE name = '" + req.body.name + "'AND password = '" + req.body.pass + "'"//值用单引号包括
 //	console.log('sql:', sql)
 	connection.query(sql, function(error, results, fields) {
@@ -104,6 +134,31 @@ router.post('/deletUser',function(req,res,next){
 		try{
 			if(err) throw err
 			res.send('1')
+		}catch(e){
+			res.send('0')
+		}
+	})
+})
+
+//查询商品列表
+router.post('/getGoodsList', function(req, res, next) {
+	var pageIndex = req.body.pageIndex//当前页数
+	var limit = 5*pageIndex - 5//从多少页开始
+	var sql = "SELECT G.id, G.name,G.goods_brief,G.primary_pic_url,G.promotion_desc,C.name AS category FROM nideshop_goods AS G, nideshop_category AS C WHERE G.category_id = C.id limit "+ limit +",5"
+	var sql2 = "SELECT count(1) as nums FROM nideshop_goods"
+	connection.query(sql, function(err, results, fields) {
+		try{
+			if (err) throw err
+			connection.query(sql2, function(err2, res2, fields2) {
+				try{
+					if(err2) throw err2
+					var pageAll = Math.ceil(res2[0].nums / 5)
+					var resData = {total:pageAll,conut:results}
+					res.send(resData)
+				}catch(e){
+					res.send('0')
+				}
+			})
 		}catch(e){
 			res.send('0')
 		}

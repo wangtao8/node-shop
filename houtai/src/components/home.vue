@@ -58,7 +58,7 @@
 	export default {
 		data() {
 			return {
-				color: 'red',
+				color: 'red',//用于测试自定义的事件是否可用
 				tableData: [], //总共的数据
 				search: '',
 				nowData: {}, //当前编辑的数据
@@ -80,6 +80,7 @@
 			}
 		},
 		methods: {
+			//用于测试自定义的事件是否可用
 			changeColor(){
 				return this.color
 			},
@@ -107,9 +108,6 @@
 				const res = await deletUser(datas)
 				this.getUserInfo() //更改成功后，重新刷新页面
 				console.log('删除用户的结果：', res)
-			},
-			getUserInfo() {
-
 			},
 			async sure() { //确定
 				var data = this.nowData
