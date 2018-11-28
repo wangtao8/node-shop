@@ -36,8 +36,28 @@ router.post('/upload',upload.single("uploadFile"), function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin","*");
 	/*星号表示所有的异域请求都可以接受，*/
   res.setHeader("Access-Control-Allow-Methods","GET,POST");
-  res.send(fileInfo.path.toString().replace("public",""));
+  console.log('查看返回的数据：', fileInfo.path.toString().replace("public","").replace(/\\/g,"/"))
+  res.send(fileInfo.path.toString().replace("public","").replace(/\\/g,"/"));
 });
+
+/* 图片地址储存进入数据库  */
+router.post('/toSql', function(req, res, next) {
+//	console.log('req.body:', req.body.id)
+	var id = req.body.id
+	var img_url = req.body.url
+	console.log('img_url:', img_url)
+	var sql = "UPDATE nideshop_goods SET primary_pic_url = '"+ img_url +"' WHERE id = '"+ id +"' "
+	connection.query(sql, function(error, results, fields) {
+		try{
+				if(error) throw error;
+				console.log('更改数据的结果：', results)
+				res.send('1')
+			}catch(e){
+				console.log('错误：', e)
+				res.send('0')
+			}
+	})
+})
 
 /* GET home page. */
 router.get('/test', function(req, response, next) {

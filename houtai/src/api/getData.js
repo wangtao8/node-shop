@@ -35,3 +35,9 @@ export const getUsers = data => fetch('/api/getUsers', data, 'POST');
  * */
 
 export const getGoodsList = data => fetch('/api/getGoodsList', data, 'POST');
+
+/**
+ * 上传文件
+ * */
+
+export const uploadAdres = data => fetch('/api/toSql', data, 'POST');

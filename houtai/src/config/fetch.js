@@ -1,9 +1,9 @@
 import { baseUrl } from './env'
 
-export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
+export default async(url = '', data = {}, type = 'GET', isFormData, method = 'fetch') => {
 	type = type.toUpperCase();
 //	url = baseUrl + url;
-
+	console.log('isFormData:', isFormData)
 	if (type == 'GET') {
 		let dataStr = ''; //数据拼接字符串
 		Object.keys(data).forEach(key => {
@@ -17,15 +17,26 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 	}
 
 	if (window.fetch && method == 'fetch') {
-		let requestConfig = {
-			credentials: 'include',
-			method: type,
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			mode: "cors",
-			cache: "force-cache"
+		let requestConfig
+		if (isFormData) {
+			requestConfig = {
+				method: type,
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					"Access-Control-Allow-Origin": "*"
+				},
+			}
+		} else {
+			requestConfig = {
+				credentials: 'include',
+				method: type,
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				mode: "cors",
+				cache: "force-cache"
+			}
 		}
 
 		if (type == 'POST') {
