@@ -30,11 +30,11 @@
 				</el-menu>
 			</el-col>
 			<el-col :span="20" style="height: 100%;overflow: auto;">
-				<!--<keep-alive>-->
+				<keep-alive>
 					<transition :name="transitionName" :key="toDepth">   
 						<router-view></router-view>
     				</transition>
-				<!--</keep-alive>-->
+				</keep-alive>
 			</el-col>
 		</el-row>
 	</div>
