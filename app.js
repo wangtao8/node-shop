@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var bodyParser = require('body-parser');
 var proxy = require('http-proxy-middleware');
+var socket = require('./server/app')
 
 var app = express();
 

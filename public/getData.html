@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script>
+        $(function(){
+            GetData()
+        })
+        function GetData(){
+            $.ajax({
+               type: "GET",
+               url: "http://127.0.0.1:3000/getData",
+               headers: {  
+                    Accept: "application/json; charset=utf-8"  
+                },  
+               success: function(data){
+                    console.log(data)
+                    var html = '<div>'+ data.title +'</div>'
+                    // for(let i = 0; i < data.length; i++){
+                    //     html += '<div>' + data[i].title + '</div>'
+                    // }
+                    $('body').html(html)
+                },
+                fail: function(err){
+                    alert(err)
+                }
+            });
+        }
+        setInterval(function(){
+            GetData()
+        },5000)
+    </script>
+</body>
+</html>

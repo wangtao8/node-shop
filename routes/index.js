@@ -3,7 +3,69 @@ var router = express.Router();
 var connection = require('../mysql/goods').connection; //引入链接
 //引入上传中间件模块
 var multer  = require('multer');
+var cheerio = require('cheerio');
 
+var superagent = require('superagent');
+router.get('/getData',(req,res,next)=>{
+	superagent.get('http://www.dashen28.com/?tdsourcetag=s_pctim_aiomsg')
+    .end(function (err, sres) {
+      if (err) {
+        return next(err);
+      }
+    /**
+     *这里的sres.text就是爬取页面的html，可以在下方打印
+     */
+	//   console.log('页面的html：', sres.text)
+      /**
+       *cheerio也就是nodejs下的jQuery  将整个文档包装成一个集合，定义一个变量$接收
+       */
+      var $ = cheerio.load(sres.text);
+	  var items = [];
+	  var NewItems = {}
+        /**
+         * 可以先看看页面结构，找出你想爬取的数据，餐后操作dom取得数据
+         */
+      $('.result').each(function (idx, element) {
+		var $element = $(element);
+		// console.log('element:', element)
+       /**
+         * 拼装数据
+         */
+		var c = new Date().getTime()
+		var now = formatDate(c)
+        items.push({
+          title: $element.text().replace(/\s/g,'') + '  ' + now
+		});
+        //这里的items就是我们要的数据
+	  })
+		var c = new Date().getTime()
+		var now = formatDate(c)
+		NewItems.title = $('.result').eq(2).text().replace(/\s/g,'') + '  ' + now
+	    /**设置响应头允许ajax跨域访问**/
+		res.setHeader("Access-Control-Allow-Origin","*");
+		/*星号表示所有的异域请求都可以接受，*/
+		res.setHeader("Access-Control-Allow-Methods","GET,POST");
+		console.log('NewItems:', NewItems)
+		res.send(NewItems)
+	})
+})
+function formatDate(time){
+    var date = new Date(time);
+
+    var year = date.getFullYear(),
+        month = date.getMonth() + 1,//月份是从0开始的
+        day = date.getDate(),
+        hour = date.getHours(),
+        min = date.getMinutes(),
+        sec = date.getSeconds();
+    var newTime = year + '-' +
+                month + '-' +
+                day + ' ' +
+                hour + ':' +
+                min + ':' +
+                sec;
+    return newTime;         
+}
 //初始化上传目录,自定义本地保存的路径
 //var upload = multer({ dest: './files/' }); //使用storage时不需要单独制定目录，storage中有目录设置
 var uploadFolder='./public/images'; //放入静态资源目录才能正常显示 页面路径一定要正确 我擦  坑啊！！！！
@@ -22,6 +84,10 @@ var storage = multer.diskStorage({
 
 // 通过 storage 选项来对 上传行为 进行定制化
 var upload = multer({ storage: storage });
+
+router.get('/test',function(req,res,next){
+	res.send('2')
+})
 
 /* 文件上传的api */
 router.post('/upload',upload.single("uploadFile"), function(req, res, next) {
