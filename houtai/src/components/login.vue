@@ -15,7 +15,7 @@
 		    <el-button @click="login('ruleForm2')">注册</el-button>
 		    <div @click="changeName">测试mutations </div>
         <div @click="changeName2">测试actions</div>
-        <div @click="changeId">当前值：{{this.$store.state.curtId}}</div>
+        <div @click="changeId">当前值点击 +1：{{this.$store.state.curtId}}</div>
 		  </el-form-item>
 		</el-form>
   </div>
