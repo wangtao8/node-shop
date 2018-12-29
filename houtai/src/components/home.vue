@@ -54,7 +54,7 @@
 </template>
 
 <script>
-	import {deletUser, editUser, getUsers} from '../api/getData'
+	import {deletUser, editUser, getUsers} from '../api/getdata'
 	export default {
 		data() {
 			return {

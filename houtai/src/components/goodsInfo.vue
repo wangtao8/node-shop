@@ -47,7 +47,7 @@
 
 <script>
 	import axios from 'axios'
-	import {uploadAdres} from '../api/getData.js'
+	import {uploadAdres} from '../api/getdata.js'
 	export default {
 		data() {
 			return {

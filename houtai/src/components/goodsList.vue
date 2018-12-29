@@ -32,7 +32,7 @@
 </template>
 
 <script>
-	import {getGoodsList} from '../api/getData'
+	import {getGoodsList} from '../api/getdata'
 	export default{
 		data(){
 			return {

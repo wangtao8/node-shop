@@ -27,6 +27,10 @@
 						<i class="el-icon-setting"></i>
 						<span slot="title">详细说明</span>
 					</el-menu-item>
+					<el-menu-item index="Jisuan">
+						<i class="el-icon-setting"></i>
+						<span slot="title">计算属性</span>
+					</el-menu-item>
 				</el-menu>
 			</el-col>
 			<el-col :span="20" style="height: 100%;overflow: auto;">
