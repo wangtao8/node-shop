@@ -15,6 +15,7 @@
 		    <el-button @click="login('ruleForm2')">注册</el-button>
 		    <div @click="changeName">测试mutations </div>
         <div @click="changeName2">测试actions</div>
+        <div @click="changeId">当前值：{{this.$store.state.curtId}}</div>
 		  </el-form-item>
 		</el-form>
   </div>
@@ -25,7 +26,7 @@
     import {login, regiester2} from '../api/getdata'
     import {myMixin, testMixin} from '../mixins/mixins'
     import {fetchList, upload} from '../api/testrequest'
-    import {mapState} from 'vuex'
+    import {mapState, mapActions} from 'vuex'
     // import store from '../store'
     export default {
         data() {
@@ -89,7 +90,13 @@
           }
         },
         methods: {
-          changeName(){
+          // changeId(){
+          //   this.$store.dispatch('changeId')
+          // },
+          ...mapActions([//跟上面方法一样，可以简化代码
+            "changeId"
+          ]),
+          changeName(){//要传值可以用下面这种写法，如果只触发方法就用上面的简写
             this.now++
             this.$store.commit('valIsChange', {name: ('wangtao'+this.now)})
           },

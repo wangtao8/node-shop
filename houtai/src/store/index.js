@@ -5,7 +5,7 @@ Vue.use(vuex);
 export default new vuex.Store({
 	state: {
 		name: '',
-		curtId: {}
+		curtId: 0
 	},
 	getters: {
 
@@ -13,12 +13,18 @@ export default new vuex.Store({
 	mutations: {
 		valIsChange(state, newVal){
 			state.name = newVal.name
+		},
+		idChange(state){
+			state.curtId++
 		}
 	},
 	actions: {
-		changesVal(context, newVal){
-			// console.log('actionsNewVal:', newVal.kk)
-			context.commit('valIsChange',{name: newVal.kk});
+		changesVal({commit}, newVal){
+			// console.log('actionsNewVal:', newVal)
+			commit('valIsChange',{name: newVal.kk});
+		},
+		changeId({commit}){
+			commit('idChange')
 		}
 	}
 })
