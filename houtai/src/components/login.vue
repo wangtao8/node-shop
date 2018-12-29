@@ -93,7 +93,7 @@
           // changeId(){
           //   this.$store.dispatch('changeId')
           // },
-          ...mapActions([//跟上面方法一样，可以简化代码
+          ...mapActions([//跟上面写法实现一样，可以简化代码
             "changeId"
           ]),
           changeName(){//要传值可以用下面这种写法，如果只触发方法就用上面的简写
