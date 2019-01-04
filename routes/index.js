@@ -86,7 +86,15 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.get('/test',function(req,res,next){
+	/**设置响应头允许ajax跨域访问**/
+	res.setHeader("Access-Control-Allow-Origin","*");
+	/*星号表示所有的异域请求都可以接受，*/
+  res.setHeader("Access-Control-Allow-Methods","GET,POST");
 	res.send('2')
+})
+
+router.post('/postTest', (req,res,next)=>{
+	res.send('3')
 })
 
 /* 文件上传的api */

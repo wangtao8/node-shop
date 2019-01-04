@@ -16,6 +16,11 @@
 		    <div @click="changeName">测试mutations </div>
         <div @click="changeName2">测试actions</div>
         <div @click="changeId">当前值点击 +1：{{this.$store.state.curtId}}</div>
+
+        <div @click="test">点击测试get封装</div>
+        <div @click="test2">点击测试post封装</div>
+
+        <div v-for="(item, index) in timeList" :key='index'>{{jisuan(item.time)}}</div>
 		  </el-form-item>
 		</el-form>
   </div>
@@ -24,8 +29,9 @@
 <script>
 //	import axios from 'axios'
     import {login, regiester2} from '../api/getdata'
-    import {myMixin, testMixin} from '../mixins/mixins'
-    import {fetchList, upload} from '../api/testrequest'
+    import {myMixin, testMixin, TimeFiltering} from '../mixins/mixins'
+    // import {fetchList, upload} from '../api/testrequest'
+    import {Test, Test2} from '../api/server'
     import {mapState, mapActions} from 'vuex'
     // import store from '../store'
     export default {
@@ -57,6 +63,13 @@
             }
           };
           return {
+            timeList: [
+              {time: '2018-12-01 20:24:14'},
+              {time: '2018-12-31 20:24:14'},
+              {time: '2019-1-01 20:24:14'},
+              {time: '2019-1-02 20:24:14'},
+              {time: '2019-1-03 20:24:14'}
+            ],
             ruleForm2: {
               pass: '',
               checkPass: '',
@@ -77,12 +90,46 @@
           };
         },
         computed: {
-        //   name() {
-        //     return this.$store.state.name;
-        //   }
-          ...mapState({
-            name:state=>state.name
-          })
+          name() {
+            return this.$store.state.name;
+          },
+          // ...mapState({
+          //   name:state=>state.name
+          // })
+          jisuan(){
+            return function(time){
+              let nowTime = new Date().getTime()
+              let oldTime = new Date(time).getTime()
+              let oneDay = 24*60*60*1000
+              let twoDay = 2*24*60*60*1000
+              let oneWeek = 7*24*60*60*1000
+              let nowDay = new Date(time).getDay()
+              if (nowTime - oldTime < oneDay){
+                return new Date(time).format("hh:mm")
+              }else if( nowTime - oldTime < twoDay){
+                return '昨天'
+              } else if ( nowTime - oldTime < oneWeek ){
+                switch (nowDay) {
+                  case 0:
+                    return '星期天';
+                  case 1:
+                    return '星期一';
+                  case 2:
+                    return '星期二';
+                  case 3:
+                    return '星期三';
+                  case 4:
+                    return '星期四';
+                  case 5:
+                    return '星期五';
+                  case 6:
+                    return '星期六';
+                }
+              } else {
+                return new Date(time).format("yyyy-MM-dd hh:mm:ss")
+              }
+            }
+          }
         },
         watch: {
           name(newVal, oldVal) {
@@ -140,16 +187,20 @@
             });
           },
           async test(){
-            const data = await upload({name:'123',pass:'123'})
+            const data = await Test({name:'123',pass:'123'})
+            console.log('data:', data)
+          },
+          async test2(){
+            const data = await Test2({name:'123',pass:'123'})
             console.log('data:', data)
           }
         },
-        mixins: [myMixin,testMixin],
+        mixins: [myMixin,testMixin,TimeFiltering],
         async mounted(){
           this.testChange()
           this.testChange2()
-          var res = await fetchList()
-          console.log('res:', res)
+          // var res = await fetchList()
+          // console.log('res:', res)
         }
   }
 </script>

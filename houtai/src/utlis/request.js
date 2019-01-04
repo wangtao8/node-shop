@@ -1,10 +1,10 @@
 import axios from 'axios'
-import router from '../router';
 
-const service = axios.create({
+export const service = axios.create({
     // baseURL: process.env.BASE_API,
-    baseURL: '/api',//如果配置了baseURL 那么会在请求的url最前面默认加上代表的内容 比如/api 代表http://127.0.0.1:3000, 请求中axios.get('/test') === axios.get('http://127.0.0.1:3000/test')
-    timeout: 1000*120
+    //baseURL: '/api',//如果配置了baseURL 那么会在请求的url最前面默认加上代表的内容 比如/api 代表http://127.0.0.1:3000, 请求中axios.get('/test') === axios.get('http://127.0.0.1:3000/test')
+    timeout: 1000*60,
+    headers: {'content-Type': 'application/x-www-form-urlencoded'}
 })
 
 // request interceptor
@@ -49,7 +49,7 @@ service.interceptors.response.use(response => {
           break;
         case 500:
           err.response.message = '服务器端出错'
-          router.replace('/index')//跟 router.push 很像，唯一的不同就是，它不会向 history 添加新记录，而是跟它的方法名一样 —— 替换掉当前的 history 记录
+          // router.replace('/index')//跟 router.push 很像，唯一的不同就是，它不会向 history 添加新记录，而是跟它的方法名一样 —— 替换掉当前的 history 记录
           break;
         case 501:
           err.response.message = '网络未实现'
@@ -75,5 +75,3 @@ service.interceptors.response.use(response => {
       console.log('err:', err.response)
       return Promise.resolve(err.response)
 })
-
-export default service
